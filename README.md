@@ -41,7 +41,7 @@ This project is a Tic Tac Toe game built with ReactJS, TypeScript, and TailwindC
 ## Project Structure
 
 The project is structured as follows:
-
+```
 Tic-tac-toe/
 ├── public/
 ├── src/
@@ -63,7 +63,7 @@ Tic-tac-toe/
 ├── tailwind.config.js
 ├── package.json
 └── README.md
-
+```
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
