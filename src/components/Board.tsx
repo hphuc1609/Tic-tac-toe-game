@@ -1,15 +1,15 @@
-import Tiles from "./Tiles";
+import Tiles from './Tiles'
 
 interface BoardProps {
-  board: string[];
-  playerTurn: string;
-  handleClick: (index: number) => void;
-  winningIndices: number[];
+  board: string[]
+  playerTurn: string
+  handleClick: (index: number) => void
+  winningIndices: number[]
 }
 
 const Board = ({ board, playerTurn, handleClick, winningIndices }: BoardProps) => {
   return (
-    <div className="grid grid-cols-3 text-center gap-5">
+    <div className='grid grid-cols-3 text-center gap-5'>
       {board.map((value, index) => (
         <Tiles
           key={index}
@@ -20,7 +20,7 @@ const Board = ({ board, playerTurn, handleClick, winningIndices }: BoardProps) =
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default Board;
+export default Board

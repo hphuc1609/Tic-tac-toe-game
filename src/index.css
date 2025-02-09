@@ -8,25 +8,25 @@
 }
 
 .x-next::before {
-  content: "X";
+  content: 'X';
   transform: scale(0);
   color: transparent;
   -webkit-text-stroke: 1px var(--x-color);
 }
 .x-next:hover::before {
-  content: "X";
+  content: 'X';
   transition: all 0.2s ease-in-out;
   transform: scale(1);
 }
 
 .o-next::before {
-  content: "O";
+  content: 'O';
   transform: scale(0);
   color: transparent;
   -webkit-text-stroke: 1px var(--o-color);
 }
 .o-next:hover::before {
-  content: "O";
+  content: 'O';
   transition: all 0.2s ease-in-out;
   transform: scale(1);
 }
@@ -35,7 +35,9 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   cursor: pointer;
 }
 .button-3d:focus {
@@ -43,5 +45,5 @@
 }
 .button-3d-click:active {
   transform: translateY(4px);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4) !important;
 }
