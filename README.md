@@ -37,10 +37,14 @@ This project is a Tic Tac Toe game built with ReactJS, TypeScript, and TailwindC
 2. Navigate to the project directory: `cd tic-tac-toe`
 3. Install dependencies: `npm install`
 4. Start the development server: `npm run dev`
+5. Open your web browser and navigate to `http://localhost:5173/`.
+6. Click on the tiles to make your moves.
+7. Watch the game play out!
 
 ## Project Structure
 
 The project is structured as follows:
+
 ```
 Tic-tac-toe/
 ├── public/
@@ -64,6 +68,7 @@ Tic-tac-toe/
 ├── package.json
 └── README.md
 ```
+
 ## License
 
 This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.
