@@ -9,7 +9,7 @@ interface BoardProps {
 
 const Board = ({ board, playerTurn, handleClick, winningIndices }: BoardProps) => {
   return (
-    <div className='grid grid-cols-3 text-center gap-5'>
+    <div className='w-full grid grid-cols-3 text-center gap-5'>
       {board.map((value, index) => (
         <Tiles
           key={index}

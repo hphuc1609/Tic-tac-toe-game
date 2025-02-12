@@ -1,14 +1,19 @@
+import { useAppContext } from '@/context/appContext'
+import { motion } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
-import Board from './Board'
-import Winner from './Winner'
-import ResetButton from './Button'
-import Score from './Score'
+import { useNavigate } from 'react-router'
 import useSound from 'use-sound'
+import Board from './Board'
+import Modal from './Modal'
+import ResetButton from './ResetButton'
+import Score from './Score'
+import Winner from './Winner'
 
 // Sounds
+import clearSound from '@/sound/mixkit-clear-mouse-clicks-2997.wav'
+import alertSound from '@/sound/mixkit-video-game-mystery-alert-234.wav'
 import clickSound from '@/sound/mixkit-video-game-retro-click-237.wav'
 import winningSound from '@/sound/mixkit-winning-notification-2018.wav'
-import clearSound from '@/sound/mixkit-clear-mouse-clicks-2997.wav'
 
 const TicTacToe = () => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(null))
@@ -16,10 +21,17 @@ const TicTacToe = () => {
   const [winner, setWinner] = useState<string>('')
   const [score, setScore] = useState<{ X: number; O: number; Draw: number }>({ X: 0, O: 0, Draw: 0 })
   const [winningIndices, setWinningIndices] = useState<number[]>([])
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [openQuit, setOpenQuit] = useState<boolean>(false)
+  const [openNextRound, setOpenNextRound] = useState<boolean>(false)
 
   const [play] = useSound(clickSound)
   const [playWin] = useSound(winningSound)
   const [playClear] = useSound(clearSound)
+  const [playAlert] = useSound(alertSound)
+
+  const navigate = useNavigate()
+  const app = useAppContext()
 
   const handleClick = useCallback(
     (index: number) => {
@@ -60,9 +72,11 @@ const TicTacToe = () => {
 
         if (valueTile1 && valueTile1 === valueTile2 && valueTile1 === valueTile3) {
           setWinner(valueTile1)
-          playWin()
           setWinningIndices(combo)
-          return
+          playWin()
+
+          const nextRound = setTimeout(() => setOpenNextRound(true), 800)
+          return () => clearTimeout(nextRound)
         }
       }
 
@@ -82,31 +96,103 @@ const TicTacToe = () => {
     return
   }, [winner])
 
+  // Handle CPU Move
+  useEffect(() => {
+    if (app.option.toLowerCase() === 'single' && playerTurn === 'O') {
+      const handleCPUMove = (currentBoard: string[]) => {
+        const emptyIndices = currentBoard
+          .map((tile, i) => (tile === null ? i : null))
+          .filter((i) => i !== null) as number[]
+
+        if (emptyIndices.length === 0 || winner) return
+
+        const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)]
+        const newBoard = [...currentBoard]
+        newBoard[randomIndex] = 'O'
+        setBoard(newBoard)
+        setPlayerTurn('X')
+      }
+
+      const cpuMove = setTimeout(() => handleCPUMove(board), 1000)
+      return () => clearTimeout(cpuMove)
+    }
+  }, [app.option, board, playerTurn, winner])
+
   const handleResetGame = () => {
     setBoard(Array(9).fill(null))
     setPlayerTurn('X')
     setWinner('')
     setWinningIndices([])
+    setOpenModal(false)
+    setOpenNextRound(false)
     playClear()
   }
 
+  const handleOpenModal = () => {
+    setOpenModal(true)
+    playAlert()
+  }
+
+  const handleCancelModal = () => {
+    setOpenModal(false)
+    setOpenQuit(false)
+  }
+
+  const handleQuitGame = () => {
+    navigate('/')
+    playClear()
+  }
+
+  const handleOpenQuitModal = () => {
+    setOpenQuit(true)
+    playAlert()
+  }
+
   return (
-    <div className='flex flex-col items-center gap-9'>
-      <div className='text-4xl font-extrabold flex gap-1'>
-        <span className='text-sky-500'>X</span>
-        <span className='text-yellow-500'>O</span>
-        <span className='ml-2'>Game</span>
-      </div>
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 1, delay: 0.3 }}
+      exit={{ opacity: 0 }}
+      className='flex flex-col items-center gap-6 w-[500px]'
+    >
       <div className='flex items-center justify-between w-full'>
+        <div className='text-4xl font-extrabold flex gap-1 cursor-pointer' onClick={handleOpenQuitModal}>
+          <span className='text-primary'>X</span>
+          <span className='text-secondary'>O</span>
+        </div>
         <div className='button-3d pointer-events-none !px-6 bg-slate-800 text-lg font-bold text-gray-300 '>
           Player: {playerTurn}
         </div>
-        <ResetButton handleResetGame={handleResetGame} />
+        <ResetButton handleOpenModal={handleOpenModal} />
       </div>
       <Board board={board} playerTurn={playerTurn} handleClick={handleClick} winningIndices={winningIndices} />
       <Winner winner={winner} />
       <Score score={score} />
-    </div>
+
+      <Modal
+        open={openModal && !winner}
+        content='Restart Game ?'
+        btnTextRight='Yes, Restart'
+        handleSubmit={handleResetGame}
+        handleCancel={handleCancelModal}
+      />
+      <Modal
+        open={openQuit}
+        content='Quite game?'
+        btnTextRight='Yes, Quit'
+        handleCancel={handleCancelModal}
+        handleSubmit={handleQuitGame}
+      />
+      <Modal
+        open={openNextRound}
+        content='Next Round ?'
+        btnTextLeft='No, Quit'
+        btnTextRight='Yes, Next Round'
+        handleCancel={handleQuitGame}
+        handleSubmit={handleResetGame}
+      />
+    </motion.div>
   )
 }
 

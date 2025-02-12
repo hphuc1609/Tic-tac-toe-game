@@ -22,8 +22,10 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide": "^0.474.0",
+    "motion": "^12.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.1.5",
     "use-sound": "^4.0.3"
   },
   "devDependencies": {
