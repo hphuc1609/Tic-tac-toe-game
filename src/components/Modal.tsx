@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useEffect } from 'react'
 
 interface ModalProps {
   open?: boolean
@@ -10,6 +11,19 @@ interface ModalProps {
 }
 
 const Modal = ({ open, content, btnTextLeft, btnTextRight, handleCancel, handleSubmit }: ModalProps) => {
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [open])
+
   return (
     <div
       aria-label='modal'
