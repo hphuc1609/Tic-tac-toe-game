@@ -36,13 +36,13 @@ const Home = () => {
       initial={{ opacity: 0, y: -20 }}
       transition={{ duration: 1, delay: 0.2 }}
       exit={{ opacity: 0, y: -20 }}
-      className='m-auto w-[300px] flex flex-col items-center'
+      className='m-auto min-w-[300px] flex flex-col items-center'
     >
       <Logo />
       <button
         onMouseEnter={() => playHover()}
         onClick={handleSingleplayer}
-        className='button-3d button-3d-click flex items-center justify-center gap-2 w-full h-14 bg-primary uppercase tracking-widest font-semibold text-xl !shadow-[0_8px_0_#0284c7] active:!shadow-[0_4px_0_#0284c7] hover:bg-sky-400 mt-9 mb-7'
+        className='button-3d button-3d-click flex items-center justify-center gap-2 w-full h-16 !px-5 bg-primary uppercase tracking-widest font-semibold text-xl !shadow-[0_8px_0_#0284c7] active:!shadow-[0_4px_0_#0284c7] hover:bg-sky-400 mt-9 mb-7'
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -64,7 +64,7 @@ const Home = () => {
       <button
         onMouseEnter={() => playHover()}
         onClick={handleMultiplayer}
-        className='button-3d button-3d-click flex items-center justify-center gap-2 w-full h-14 bg-secondary uppercase tracking-widest font-semibold text-xl !shadow-[0_8px_0_#ca8a04] active:!shadow-[0_4px_0_#ca8a04] hover:bg-yellow-400'
+        className='button-3d button-3d-click flex items-center justify-center gap-2 w-full h-16 !px-5 bg-secondary uppercase tracking-widest font-semibold text-xl !shadow-[0_8px_0_#ca8a04] active:!shadow-[0_4px_0_#ca8a04] hover:bg-yellow-400'
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'

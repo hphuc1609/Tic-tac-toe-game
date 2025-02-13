@@ -83,8 +83,12 @@ const TicTacToe = () => {
       if (board.every((tile) => tile !== null)) {
         setWinner('Draw')
         setScore((prev) => ({ ...prev, Draw: prev.Draw + 1 }))
+
+        const nextRound = setTimeout(() => setOpenNextRound(true), 800)
+        return () => clearTimeout(nextRound)
       }
     }
+
     checkWinner()
   }, [board, playWin])
 
@@ -171,8 +175,8 @@ const TicTacToe = () => {
       <Score score={score} />
 
       <Modal
-        open={openModal && !winner}
-        content='Restart Game ?'
+        open={openModal}
+        content='Restart Game?'
         btnTextRight='Yes, Restart'
         handleSubmit={handleResetGame}
         handleCancel={handleCancelModal}
@@ -186,7 +190,7 @@ const TicTacToe = () => {
       />
       <Modal
         open={openNextRound}
-        content='Next Round ?'
+        content='Next Round?'
         btnTextLeft='No, Quit'
         btnTextRight='Yes, Next Round'
         handleCancel={handleQuitGame}
