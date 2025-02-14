@@ -34,8 +34,8 @@ const Modal = ({ open, content, btnTextLeft, btnTextRight, handleCancel, handleS
     >
       <div
         className={clsx(
-          'relative w-full p-16 max-sm:px-4 bg-primaryDark transition-all duration-700',
-          open ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+          'relative w-full p-16 max-sm:px-4 bg-primaryDark transition-all duration-500',
+          open ? 'translate-y-0' : 'translate-y-full'
         )}
       >
         <div className='max-w-lg mx-auto'>

@@ -108,22 +108,47 @@ const TicTacToe = () => {
 
         if (emptyIndices.length === 0 || winner) return
 
-        // Random move
-        let cpuMoveIndex: number = emptyIndices[Math.floor(Math.random() * emptyIndices.length)]
+        let cpuMoveIndex: number | null = null
 
+        // Kiem tra CPU có thể thắng
         for (const { combo } of winningCombinations) {
           const [a, b, c] = combo
-
-          if (currentBoard[a] === 'X' && currentBoard[b] === 'X' && currentBoard[c] === null) {
+          if (currentBoard[a] === 'O' && currentBoard[b] === 'O' && currentBoard[c] === null) {
             cpuMoveIndex = c
             break
-          } else if (currentBoard[a] === 'X' && currentBoard[c] === 'X' && currentBoard[b] === null) {
+          }
+          if (currentBoard[a] === 'O' && currentBoard[c] === 'O' && currentBoard[b] === null) {
             cpuMoveIndex = b
             break
-          } else if (currentBoard[b] === 'X' && currentBoard[c] === 'X' && currentBoard[a] === null) {
+          }
+          if (currentBoard[b] === 'O' && currentBoard[c] === 'O' && currentBoard[a] === null) {
             cpuMoveIndex = a
             break
           }
+        }
+
+        // Nếu không thể thắng, kiểm tra chặn người chơi
+        if (cpuMoveIndex === null) {
+          for (const { combo } of winningCombinations) {
+            const [a, b, c] = combo
+            if (currentBoard[a] === 'X' && currentBoard[b] === 'X' && currentBoard[c] === null) {
+              cpuMoveIndex = c
+              break
+            }
+            if (currentBoard[a] === 'X' && currentBoard[c] === 'X' && currentBoard[b] === null) {
+              cpuMoveIndex = b
+              break
+            }
+            if (currentBoard[b] === 'X' && currentBoard[c] === 'X' && currentBoard[a] === null) {
+              cpuMoveIndex = a
+              break
+            }
+          }
+        }
+
+        // Nếu không có nước đi nào quan trọng, chọn ngẫu nhiên
+        if (cpuMoveIndex === null) {
+          cpuMoveIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)]
         }
 
         const newBoard = [...currentBoard]
