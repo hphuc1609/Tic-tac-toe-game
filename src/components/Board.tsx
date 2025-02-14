@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import Tiles from './Tiles'
 
 interface BoardProps {
@@ -5,11 +6,16 @@ interface BoardProps {
   playerTurn: string
   handleClick: (index: number) => void
   winningIndices: number[]
+  isSingle: boolean
 }
 
-const Board = ({ board, playerTurn, handleClick, winningIndices }: BoardProps) => {
+const Board = ({ board, playerTurn, handleClick, winningIndices, isSingle }: BoardProps) => {
   return (
-    <div className='w-full grid grid-cols-3 text-center gap-5'>
+    <div
+      className={clsx('w-full grid grid-cols-3 text-center gap-3 sm:gap-5', {
+        'pointer-events-none': isSingle && playerTurn === 'O'
+      })}
+    >
       {board.map((value, index) => (
         <Tiles
           key={index}

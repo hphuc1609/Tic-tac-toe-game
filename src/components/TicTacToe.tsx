@@ -15,6 +15,22 @@ import alertSound from '@/sound/mixkit-video-game-mystery-alert-234.wav'
 import clickSound from '@/sound/mixkit-video-game-retro-click-237.wav'
 import winningSound from '@/sound/mixkit-winning-notification-2018.wav'
 
+const winningCombinations = [
+  // Rows
+  { combo: [0, 1, 2] },
+  { combo: [3, 4, 5] },
+  { combo: [6, 7, 8] },
+
+  // Columns
+  { combo: [0, 3, 6] },
+  { combo: [1, 4, 7] },
+  { combo: [2, 5, 8] },
+
+  // Diagonals
+  { combo: [0, 4, 8] },
+  { combo: [2, 4, 6] }
+]
+
 const TicTacToe = () => {
   const [board, setBoard] = useState<string[]>(Array(9).fill(null))
   const [playerTurn, setPlayerTurn] = useState<string>('X')
@@ -48,30 +64,12 @@ const TicTacToe = () => {
 
   // Check for winner
   useEffect(() => {
-    const winningCombinations = [
-      // Rows
-      { combo: [0, 1, 2] },
-      { combo: [3, 4, 5] },
-      { combo: [6, 7, 8] },
-
-      // Columns
-      { combo: [0, 3, 6] },
-      { combo: [1, 4, 7] },
-      { combo: [2, 5, 8] },
-
-      // Diagonals
-      { combo: [0, 4, 8] },
-      { combo: [2, 4, 6] }
-    ]
-
     const checkWinner = () => {
       for (const { combo } of winningCombinations) {
-        const valueTile1 = board[combo[0]]
-        const valueTile2 = board[combo[1]]
-        const valueTile3 = board[combo[2]]
+        const [a, b, c] = combo
 
-        if (valueTile1 && valueTile1 === valueTile2 && valueTile1 === valueTile3) {
-          setWinner(valueTile1)
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          setWinner(board[a])
           setWinningIndices(combo)
           playWin()
 
@@ -110,14 +108,31 @@ const TicTacToe = () => {
 
         if (emptyIndices.length === 0 || winner) return
 
-        const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)]
+        // Random move
+        let cpuMoveIndex: number = emptyIndices[Math.floor(Math.random() * emptyIndices.length)]
+
+        for (const { combo } of winningCombinations) {
+          const [a, b, c] = combo
+
+          if (currentBoard[a] === 'X' && currentBoard[b] === 'X' && currentBoard[c] === null) {
+            cpuMoveIndex = c
+            break
+          } else if (currentBoard[a] === 'X' && currentBoard[c] === 'X' && currentBoard[b] === null) {
+            cpuMoveIndex = b
+            break
+          } else if (currentBoard[b] === 'X' && currentBoard[c] === 'X' && currentBoard[a] === null) {
+            cpuMoveIndex = a
+            break
+          }
+        }
+
         const newBoard = [...currentBoard]
-        newBoard[randomIndex] = 'O'
+        newBoard[cpuMoveIndex] = 'O'
         setBoard(newBoard)
         setPlayerTurn('X')
       }
 
-      const cpuMove = setTimeout(() => handleCPUMove(board), 1000)
+      const cpuMove = setTimeout(() => handleCPUMove(board), 1500)
       return () => clearTimeout(cpuMove)
     }
   }, [app.option, board, playerTurn, winner])
@@ -158,7 +173,7 @@ const TicTacToe = () => {
       initial={{ opacity: 0 }}
       transition={{ duration: 1, delay: 0.3 }}
       exit={{ opacity: 0 }}
-      className='flex flex-col items-center gap-6 w-[500px]'
+      className='flex flex-col items-center justify-center gap-6 w-[500px]'
     >
       <div className='flex items-center justify-between w-full'>
         <div className='text-4xl font-extrabold flex gap-1 cursor-pointer' onClick={handleOpenQuitModal}>
@@ -170,7 +185,13 @@ const TicTacToe = () => {
         </div>
         <ResetButton handleOpenModal={handleOpenModal} />
       </div>
-      <Board board={board} playerTurn={playerTurn} handleClick={handleClick} winningIndices={winningIndices} />
+      <Board
+        board={board}
+        playerTurn={playerTurn}
+        handleClick={handleClick}
+        winningIndices={winningIndices}
+        isSingle={app.option === 'single'}
+      />
       <Winner winner={winner} />
       <Score score={score} />
 
@@ -183,7 +204,7 @@ const TicTacToe = () => {
       />
       <Modal
         open={openQuit}
-        content='Quite game?'
+        content='Quit game?'
         btnTextRight='Yes, Quit'
         handleCancel={handleCancelModal}
         handleSubmit={handleQuitGame}
